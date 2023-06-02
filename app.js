@@ -13,6 +13,7 @@ let clear_task_btn=document.querySelector("#clear_task_btn");
 form.addEventListener('submit',addTasks);
 
 clear_task_btn.addEventListener("click",clear_all_tasks)
+all_tasks.addEventListener("click",removeTask);
 
 function addTasks(e){
     if (task.value=='' || task.value==null){
@@ -32,7 +33,7 @@ function addTasks(e){
         // btn.style.fontSize="2px";
         li.appendChild(btn);
         task.value=''
-        clear_task_btn.style.display="block";
+        
     }
     e.preventDefault();
 }
@@ -41,8 +42,14 @@ function clear_all_tasks(){
     while (all_tasks.firstChild){
         all_tasks.firstChild.remove()
     }
-    clear_task_btn.style.display="None";
+    
 
 
 }
 
+function removeTask(e){
+    
+    if (e.target.tagName=="BUTTON"){
+        e.target.parentElement.remove()
+    }
+}
