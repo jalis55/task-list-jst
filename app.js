@@ -4,6 +4,8 @@ let task=document.querySelector("#new_task");
 
 let all_tasks=document.querySelector("#tasks");
 
+let filter_task=document.querySelector("#task_filter");
+
 let clear_task_btn=document.querySelector("#clear_task_btn");
 
 
@@ -12,8 +14,11 @@ let clear_task_btn=document.querySelector("#clear_task_btn");
 
 form.addEventListener('submit',addTasks);
 
-clear_task_btn.addEventListener("click",clear_all_tasks)
+clear_task_btn.addEventListener("click",clear_all_tasks);
+
 all_tasks.addEventListener("click",removeTask);
+
+filter_task.addEventListener('keyup',task_filter)
 
 function addTasks(e){
     if (task.value=='' || task.value==null){
@@ -52,4 +57,18 @@ function removeTask(e){
     if (e.target.tagName=="BUTTON"){
         e.target.parentElement.remove()
     }
+}
+
+function task_filter(e){
+    let search_text=e.target.value.toLowerCase();
+    document.querySelectorAll("li").forEach((task)=>{
+        let item=task.firstChild.textContent;
+        if (item.toLocaleLowerCase().indexOf(search_text) !=-1){
+            task.style.display='block';
+        }
+        else{
+            task.style.display='none';
+        }
+
+    });
 }
