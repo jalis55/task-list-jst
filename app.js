@@ -9,7 +9,7 @@ let filter_task=document.querySelector("#task_filter");
 let clear_task_btn=document.querySelector("#clear_task_btn");
 
 
-
+document.addEventListener('DOMContentLoaded', getTasks);
 
 
 form.addEventListener('submit',addTasks);
@@ -21,6 +21,7 @@ all_tasks.addEventListener("click",removeTask);
 filter_task.addEventListener('keyup',task_filter)
 
 function addTasks(e){
+    console.log('clicked');
     if (task.value=='' || task.value==null){
         alert("Task field can not be empty");
         return false;
@@ -32,11 +33,12 @@ function addTasks(e){
         all_tasks.appendChild(li)
         let btn=document.createElement("button")
         btn.innerText="Remove"
-        // btn.style.background="red";
+   
         btn.style.marginLeft="20px";
-        // btn.style.width="4px";
-        // btn.style.fontSize="2px";
+
         li.appendChild(btn);
+        //store in local storage
+        storeTaskInLocalStorage(task.value);
         task.value=''
         
     }
@@ -55,7 +57,12 @@ function clear_all_tasks(){
 function removeTask(e){
     
     if (e.target.tagName=="BUTTON"){
-        e.target.parentElement.remove()
+        if (confirm("Are you sure?")) {
+            let element=e.target.parentElement;
+            element.remove();
+            removeFromLS(element)
+        }
+        
     }
 }
 
@@ -75,6 +82,62 @@ function task_filter(e){
 }
 
 //local storage
-function localstoragesetup(){
-    console.log('local storage');
+// Store in Local Storage
+function storeTaskInLocalStorage(task) {
+    let tasks;
+    if (localStorage.getItem('tasks') === null) {
+        tasks = [];
+    } else {
+        tasks = JSON.parse(localStorage.getItem('tasks'));
+    }
+    tasks.push(task);
+
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+function getTasks() {
+    let tasks;
+    if (localStorage.getItem('tasks') === null) {
+        tasks = [];
+    } else {
+        tasks = JSON.parse(localStorage.getItem('tasks'));
+    }
+
+    tasks.forEach(task => {
+        let li = document.createElement('li');
+        li.appendChild(document.createTextNode(task));
+        // let link = document.createElement('a');
+        // link.setAttribute('href', '#');
+        // link.innerHTML = 'x';
+        // li.appendChild(link);
+        // taskList.appendChild(li);
+
+        let btn=document.createElement("button")
+        btn.innerText="Remove"
+   
+        btn.style.marginLeft="20px";
+
+        li.appendChild(btn);
+        all_tasks.appendChild(li)
+    });
+}
+
+function removeFromLS(taskItem) {
+    let tasks;
+    if (localStorage.getItem('tasks') === null) {
+        tasks = [];
+    } else {
+        tasks = JSON.parse(localStorage.getItem('tasks'));
+    }
+
+    let li = taskItem;
+    li.removeChild(li.lastChild); // <a>x</a>'
+
+    tasks.forEach((task, index) =>{
+        if(li.textContent.trim() === task) {
+            tasks.splice(index, 1);
+        }
+    });
+
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
