@@ -75,3 +75,6 @@ function task_filter(e){
 }
 
 //local storage
+function localstoragesetup(){
+    console.log('local storage');
+}
