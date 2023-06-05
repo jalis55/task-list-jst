@@ -49,6 +49,7 @@ function clear_all_tasks(){
     while (all_tasks.firstChild){
         all_tasks.firstChild.remove()
     }
+    localStorage.clear()
     
 
 
